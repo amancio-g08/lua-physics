@@ -1,8 +1,5 @@
 # lua-physics
 
-mini projetos de fisica em lua, um pra cada duvida que tive vendo esse video:
-https://www.youtube.com/watch?v=ErMSHiQRnc8
-
 cada pasta tem um arquivo `.lua` com tudo comentado, feito pra dar pra entender
 mesmo sem saber programar.
 
@@ -16,11 +13,10 @@ mesmo sem saber programar.
 
 ### acelerador
 
-segue a ordem do video: o bonequinho magnetiza uma barra de ferro, monta um
-solenoide no foguete (que vira um ima), passa por varios aneis magneticos e
+segue a ordem do video: imagine que voce magnetiza uma barra de ferro, monta um
+solenoide em um foguete (que vira um ima), passa por varios aneis magneticos e
 ganha velocidade. o codigo mostra quanto de beta (velocidade / velocidade da
-luz) da pra ganhar, com a correcao de lorentz, compara com a conta de newton
-(que passa da velocidade da luz, o que nao pode) e no final com o estilingue
+luz) da pra ganhar, com a correcao de lorentz, compara com a conta de newton, e no final com o estilingue
 gravitacional.
 
 ```
@@ -39,12 +35,12 @@ formulas:
 ![anel magnetico do video](imagens/anel.webp)
 
 *um dos aneis: as linhas de campo atravessando o buraco sao o fluxo
-magnetico (fluxo = B A cos theta). imagem do [video](https://www.youtube.com/watch?v=ErMSHiQRnc8).*
+magnetico (fluxo = B A cos theta).
 
 ![estilingue gravitacional do video](imagens/estilingue.webp)
 
 *estilingue gravitacional: a nave chega quase parada (150 m/s) num planeta a
-10 km/s e sai com o dobro. imagem do [video](https://www.youtube.com/watch?v=ErMSHiQRnc8).*
+10 km/s e sai com o dobro.
 
 o que sai:
 1. **barra**: com 1000 dominios sorteados, cada passada do ima alinha mais.
