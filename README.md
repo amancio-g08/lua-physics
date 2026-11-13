@@ -16,21 +16,30 @@ mesmo sem saber programar.
 
 ### acelerador
 
-foguete passando por aneis magneticos (solenoides), vendo quanto de beta
-(velocidade / velocidade da luz) ele ganha por anel, com a correcao de lorentz.
-compara com a conta de newton (que passa da velocidade da luz, o que nao pode)
-e no final com o estilingue gravitacional em jupiter.
+segue a ordem do video: o bonequinho magnetiza uma barra de ferro, monta um
+solenoide no foguete (que vira um ima), passa por varios aneis magneticos e
+ganha velocidade. o codigo mostra quanto de beta (velocidade / velocidade da
+luz) da pra ganhar, com a correcao de lorentz, compara com a conta de newton
+(que passa da velocidade da luz, o que nao pode) e no final com o estilingue
+gravitacional.
 
 ```
 lua acelerador/acelerador.lua
 ```
 
 formulas:
+- barra magnetizada: B = 2 T * alinhamento dos dominios (media de cos do angulo)
 - campo no solenoide: B = n * mu * I
+- fluxo no anel: fluxo = B * A * cos(theta)
 - energia por anel: eta * B^2 / (2 * mu0) * volume
 - fator de lorentz: gamma = 1 + k * E_anel / (m * c^2)
 - velocidade: beta = sqrt(1 - 1/gamma^2)
 - estilingue do video: vf = (vi + 2U) * sqrt(1 - 4 vi U (1 - cos theta) / (vi + 2U)^2)
+
+![anel magnetico do video](imagens/anel.webp)
+
+*um dos aneis: as linhas de campo atravessando o buraco sao o fluxo
+magnetico (fluxo = B A cos theta). imagem do [video](https://www.youtube.com/watch?v=ErMSHiQRnc8).*
 
 ![estilingue gravitacional do video](imagens/estilingue.webp)
 
@@ -38,12 +47,22 @@ formulas:
 10 km/s e sai com o dobro. imagem do [video](https://www.youtube.com/watch?v=ErMSHiQRnc8).*
 
 o que sai:
-- a 5% de mc^2 por anel, chega em beta 0.8 no anel 14. o relogio do foguete anda
-  a 60% do nosso (passam 30 s aqui, 18 s la)
-- um solenoide de verdade (1,26 T, ~3 kJ por anel) precisaria de ~2 x 10^16 aneis pra isso
-- o estilingue do video (U = 10000 m/s, vi = 150 m/s, theta = 45) da 20106 m/s
-  pela formula. o video mostra 20070, que seria theta perto de 62 graus
-- 20 sobrevoos em jupiter de verdade nao chegam nem perto de 0.8
+1. **barra**: com 1000 dominios sorteados, cada passada do ima alinha mais.
+   o alinhamento vai de ~0 pra 0.64, 0.90, 0.97... e a barra chega perto de 2 T
+2. **solenoide do video** (n = 2): so no ar da 0.0025 T. com a barra de ferro
+   dentro passaria de 2.5 T, mas o ferro satura em 2 T
+3. **fluxo no anel** (raio 0.1 m, 1.26 T): 0.0395 Wb de frente, cai com cos
+   theta e vira zero com o anel de lado
+4. **depois dos aneis do video**: 4197261 m/s = beta 1.4%. o relogio do foguete
+   quase nao atrasa (29.997 s a cada 30 s). com o solenoide real seriam
+   ~3 x 10^12 aneis
+5. **aneis exagerados** (5% de mc^2 por anel): chega em beta 0.8 no anel 14.
+   o relogio do foguete anda a 60% do nosso (passam 30 s aqui, 18 s la)
+6. **solenoide real** (1.26 T, ~3 kJ por anel): precisaria de ~2 x 10^16 aneis
+   pra beta 0.8
+7. **estilingue do video** (U = 10000 m/s, vi = 150 m/s, theta = 45): da
+   20106 m/s pela formula. o video mostra 20070, que seria theta perto de 62 graus
+8. **jupiter de verdade**: 20 sobrevoos nao chegam nem perto de 0.8
 
 ### doppler
 

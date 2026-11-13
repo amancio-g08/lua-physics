@@ -1,5 +1,6 @@
 -- acelerador.lua
--- foguete passando por aneis magneticos (solenoides) vs estilingue gravitacional
+-- segue a ordem do video: magnetiza uma barra, monta um solenoide no foguete,
+-- passa por varios aneis magneticos e no fim compara com o estilingue gravitacional
 -- como rodar (no terminal, dentro da pasta lua-physics):
 --   lua acelerador/acelerador.lua
 --
@@ -60,6 +61,17 @@ local function campo(s)
     B = 2
   end
   return B
+end
+
+-- fluxo magnetico: quanto campo "atravessa" o buraco do anel
+--   fluxo = B * A * cos(theta)
+--   A     = area do buraco do anel (pi * raio^2)
+--   theta = inclinacao do anel. 0 = de frente pro campo (fluxo maximo),
+--           90 = de lado (nenhuma linha de campo atravessa, fluxo zero)
+-- a unidade eh o weber (Wb) = tesla x metro quadrado
+local function fluxo(B, raio, theta)
+  local A = math.pi * raio^2
+  return B * A * math.cos(math.rad(theta))   -- math.rad: graus -> radianos
 end
 
 -- energia guardada no campo de um anel:
@@ -138,12 +150,99 @@ end
 
 
 -- ===================================================================
--- 1) modo video: cada anel da 5% de m*c^2 (exagerado de proposito)
+-- 1) magnetizando a barra (metodo de inducao)
 -- ===================================================================
--- "for k = 1, 20 do" repete o bloco 20 vezes, com k = 1, 2, 3 ... 20
--- string.format monta o texto: %d = inteiro, %.3f = numero com 3 casas
+-- uma barra de ferro eh cheia de "dominios": pedacinhos que funcionam como
+-- mini imas. no comeco cada um aponta pra um lado e um cancela o outro.
+-- passando um ima pela barra, os dominios vao girando pro mesmo lado.
+--
+-- aqui a barra tem 1000 dominios com direcao sorteada.
+-- a cada passada do ima, cada dominio gira metade do caminho ate ficar alinhado.
+-- alinhamento = media de cos(angulo) de todos:
+--   0 = baguncado (nao eh ima), 1 = todos alinhados (ima no maximo)
+-- o ferro todo alinhado da uns 2 tesla, entao B da barra = 2 * alinhamento
 
-print("-- 1) aneis (5% de mc2 por anel) --")
+print("-- 1) magnetizando a barra --")
+math.randomseed(42)   -- fixa o sorteio, pra saida ser sempre a mesma
+local dominios = {}   -- tabela vazia que vai guardar o angulo de cada dominio
+for i = 1, 1000 do
+  -- math.random() sorteia um numero entre 0 e 1.
+  -- assim o angulo fica entre -180 e +180 graus (em radianos: -pi e +pi)
+  dominios[i] = (math.random() * 2 - 1) * math.pi
+end
+
+-- "for passada = 0, 5 do" repete o bloco 6 vezes, com passada = 0, 1, 2 ... 5
+-- string.format monta o texto: %d = inteiro, %.3f = numero com 3 casas
+for passada = 0, 5 do
+  local soma = 0
+  for i = 1, #dominios do   -- #dominios = quantos itens tem na tabela (1000)
+    soma = soma + math.cos(dominios[i])
+  end
+  local alinhamento = soma / #dominios
+  print(string.format("passada %d  alinhamento %.3f  B da barra = %.2f T",
+    passada, alinhamento, 2 * alinhamento))
+
+  -- passa o ima: cada dominio gira metade do caminho ate o angulo 0
+  for i = 1, #dominios do
+    dominios[i] = dominios[i] / 2
+  end
+end
+
+
+-- ===================================================================
+-- 2) solenoide do video: 2 voltas de fio em volta do foguete
+-- ===================================================================
+-- B = n * mu * I. com o fio enrolado so no ar o campo eh fraquinho.
+-- colocando a barra de ferro magnetizada dentro (o "nucleo"), mu fica ~1000
+-- vezes maior e o campo vai la pra cima (ate o ferro saturar em 2 T).
+-- eh isso que transforma o foguete num ima.
+
+print("\n-- 2) solenoide do video (n = 2, I = 1000 A) --")   -- "\n" pula uma linha
+local so_ar = { n = 2, I = 1000, mur = 1 }
+local com_ferro = { n = 2, I = 1000, mur = 1000 }
+print(string.format("so ar:            B = %.4f T", campo(so_ar)))
+print(string.format("com nucleo ferro: B = %.4f T (satura em 2 T)", campo(com_ferro)))
+
+
+-- ===================================================================
+-- 3) fluxo magnetico no anel (imagens/anel.webp)
+-- ===================================================================
+-- usando o anel do solenoide real la de cima.
+-- quando o foguete-ima passa pelo anel, esse fluxo muda, e campo que muda
+-- gera corrente (lei de faraday). eh essa interacao que empurra o foguete.
+
+print("\n-- 3) fluxo no anel (raio 0.1 m) --")
+local B_anel = campo(solenoide)
+for _, theta in ipairs({0, 30, 45, 60, 90}) do
+  print(string.format("theta %2d graus  fluxo = %.4f Wb", theta, fluxo(B_anel, solenoide.raio, theta)))
+end
+
+
+-- ===================================================================
+-- 4) depois de passar pelos aneis do video: v = 4197261 m/s
+-- ===================================================================
+-- no video o foguete sai dos aneis a 4197261 m/s. parece muito, mas eh
+-- so 1.4% da velocidade da luz. nessa velocidade a relatividade quase nao
+-- aparece: newton e einstein dao praticamente o mesmo numero.
+
+print("\n-- 4) depois dos aneis do video --")
+local v_video = 4197261
+local b_video = v_video / C
+local gamma_video = 1 / math.sqrt(1 - b_video^2)
+-- %% dentro do string.format escreve o simbolo % de verdade
+print(string.format("v = %d m/s  beta = %.3f%%  gamma = %.8f", v_video, 100 * b_video, gamma_video))
+print(string.format("relogio do foguete: %.4f s a cada 30 s aqui", 30 / gamma_video))
+local eps_real = energia_anel(solenoide) / (solenoide.massa * C^2)
+print(string.format("aneis do solenoide real pra chegar nisso: %.1e", aneis_para(b_video, eps_real)))
+
+
+-- ===================================================================
+-- 5) e se cada anel desse MUITO mais? 5% de m*c^2 por anel
+-- ===================================================================
+-- isso eh exagerado de proposito, pra chegar em beta 0.8 e ver a
+-- relatividade aparecer de verdade (relogio andando a 60%).
+
+print("\n-- 5) aneis exagerados (5% de mc2 por anel) --")
 local eps_video = 0.05
 for k = 1, 20 do
   local x = k * eps_video
@@ -156,14 +255,14 @@ print(string.format("beta 0.8 no anel %d", math.ceil(aneis_para(0.8, eps_video))
 
 
 -- ===================================================================
--- 2) solenoide de verdade (com os numeros la de cima)
+-- 6) solenoide de verdade (com os numeros la de cima)
 -- ===================================================================
 
 local E = energia_anel(solenoide)
 local mc2 = solenoide.massa * C^2   -- energia de repouso do foguete (E = mc^2)
 local eps = E / mc2
 
-print("\n-- 2) solenoide real --")   -- "\n" pula uma linha
+print("\n-- 6) solenoide real --")
 print(string.format("B = %.3f T  E/anel = %.1f J  dv/anel = %.2f m/s",
   campo(solenoide), E, math.sqrt(2 * E / solenoide.massa)))
 -- %.2e = notacao cientifica (ex: 1.23e+15 = 1,23 x 10^15)
@@ -171,23 +270,23 @@ print(string.format("aneis pra beta 0.8: %.2e", aneis_para(0.8, eps)))
 
 
 -- ===================================================================
--- 3) estilingue igual ao do video: U = 10000 m/s, vi = 150 m/s, theta = 45
+-- 7) estilingue igual ao do video: U = 10000 m/s, vi = 150 m/s, theta = 45
 -- ===================================================================
 -- a nave chega quase parada e sai com quase o dobro da velocidade do planeta.
 -- o video mostra vf = 20070 m/s, mas a propria formula com 45 graus da 20106.
 -- 20070 sairia com theta perto de 62 graus (o video deve arredondar o angulo).
 
-print("\n-- 3) estilingue do video (U = 10000 m/s, vi = 150 m/s) --")
+print("\n-- 7) estilingue do video (U = 10000 m/s, vi = 150 m/s) --")
 for _, theta in ipairs({0, 45, 62, 90, 180}) do
   print(string.format("theta %3d graus  vf = %.0f m/s", theta, estilingue_video(150, 10000, theta)))
 end
 
 
 -- ===================================================================
--- 4) estilingue em jupiter de verdade, 20 sobrevoos seguidos de frente
+-- 8) estilingue em jupiter de verdade, 20 sobrevoos seguidos de frente
 -- ===================================================================
 
-print("\n-- 4) estilingue (jupiter) --")
+print("\n-- 8) estilingue (jupiter) --")
 local v = 10000   -- comeca a 10 km/s
 for k = 1, 20 do
   -- passa a 1.1 raio de jupiter do centro (10% acima da "superficie")
