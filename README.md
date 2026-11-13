@@ -51,7 +51,7 @@ parada (150 m/s) num planeta a 10 km/s e sai com o dobro.*
 
 o que sai:
 1. **barra**: com 1000 dominios sorteados, cada passada de um ima alinha mais.
-   o alinhamento vai de ~0 pra 0.64, 0.90, 0.97... e a barra chega perto de 2 T
+   o alinhamento vai de ~0 pra 0.63, 0.90, 0.97... e a barra chega perto de 2 T
 2. **solenoide com 2 espiras**: so no ar da 0.0025 T. com a barra de ferro
    dentro passaria de 2.5 T, mas o ferro satura em 2 T
 3. **fluxo no anel** (raio 0.1 m, 1.26 T): 0.0395 Wb de frente, cai com cos
