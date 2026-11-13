@@ -13,8 +13,7 @@ mesmo sem saber programar.
 
 ### acelerador
 
-segue a ordem do video: imagine que voce magnetiza uma barra de ferro, monta um
-solenoide em um foguete (que vira um ima), passa por varios aneis magneticos e
+Imagine que voce magnetiza uma barra de ferro, monta um solenoide em um foguete (que vira um ima), passa por varios aneis magneticos e
 ganha velocidade. o codigo mostra quanto de beta (velocidade / velocidade da
 luz) da pra ganhar, com a correcao de lorentz, compara com a conta de newton, e no final com o estilingue
 gravitacional.
