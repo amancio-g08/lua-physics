@@ -1,6 +1,6 @@
 -- acelerador.lua
--- segue a ordem do video: magnetiza uma barra, monta um solenoide no foguete,
--- passa por varios aneis magneticos e no fim compara com o estilingue gravitacional
+-- magnetiza uma barra, monta um solenoide no foguete, passa por varios
+-- aneis magneticos e no fim compara com o estilingue gravitacional
 -- como rodar (no terminal, dentro da pasta lua-physics):
 --   lua acelerador/acelerador.lua
 --
@@ -137,13 +137,13 @@ local function sobrevoo(v, P, rp, theta)
   return melhor, d   -- o lua deixa devolver dois valores de uma vez
 end
 
--- a formula do estilingue que aparece no video (imagens/estilingue.webp):
+-- formula pronta do estilingue gravitacional (imagens/estilingue.webp):
 --   vf = (vi + 2U) * raiz( 1 - 4*vi*U*(1 - cos(theta)) / (vi + 2U)^2 )
 --   vi    = velocidade da nave antes (m/s)
 --   U     = velocidade do planeta (m/s)
 --   theta = angulo em graus. com theta = 0 a nave da a volta completa e sai
 --           com vi + 2U, o maximo possivel
-local function estilingue_video(vi, U, theta)
+local function estilingue(vi, U, theta)
   local t = math.rad(theta)   -- o lua faz cos em radianos, entao converte
   return (vi + 2 * U) * math.sqrt(1 - 4 * vi * U * (1 - math.cos(t)) / (vi + 2 * U)^2)
 end
@@ -190,14 +190,14 @@ end
 
 
 -- ===================================================================
--- 2) solenoide do video: 2 voltas de fio em volta do foguete
+-- 2) solenoide: 2 voltas de fio em volta do foguete
 -- ===================================================================
 -- B = n * mu * I. com o fio enrolado so no ar o campo eh fraquinho.
 -- colocando a barra de ferro magnetizada dentro (o "nucleo"), mu fica ~1000
 -- vezes maior e o campo vai la pra cima (ate o ferro saturar em 2 T).
 -- eh isso que transforma o foguete num ima.
 
-print("\n-- 2) solenoide do video (n = 2, I = 1000 A) --")   -- "\n" pula uma linha
+print("\n-- 2) solenoide (n = 2, I = 1000 A) --")   -- "\n" pula uma linha
 local so_ar = { n = 2, I = 1000, mur = 1 }
 local com_ferro = { n = 2, I = 1000, mur = 1000 }
 print(string.format("so ar:            B = %.4f T", campo(so_ar)))
@@ -219,21 +219,21 @@ end
 
 
 -- ===================================================================
--- 4) depois de passar pelos aneis do video: v = 4197261 m/s
+-- 4) foguete saindo dos aneis a 4197261 m/s
 -- ===================================================================
--- no video o foguete sai dos aneis a 4197261 m/s. parece muito, mas eh
+-- 4197261 m/s (uns 4200 km por segundo) parece muito, mas eh
 -- so 1.4% da velocidade da luz. nessa velocidade a relatividade quase nao
 -- aparece: newton e einstein dao praticamente o mesmo numero.
 
-print("\n-- 4) depois dos aneis do video --")
-local v_video = 4197261
-local b_video = v_video / C
-local gamma_video = 1 / math.sqrt(1 - b_video^2)
+print("\n-- 4) foguete a 4197261 m/s --")
+local v_foguete = 4197261
+local b_foguete = v_foguete / C
+local gamma_foguete = 1 / math.sqrt(1 - b_foguete^2)
 -- %% dentro do string.format escreve o simbolo % de verdade
-print(string.format("v = %d m/s  beta = %.3f%%  gamma = %.8f", v_video, 100 * b_video, gamma_video))
-print(string.format("relogio do foguete: %.4f s a cada 30 s aqui", 30 / gamma_video))
+print(string.format("v = %d m/s  beta = %.3f%%  gamma = %.8f", v_foguete, 100 * b_foguete, gamma_foguete))
+print(string.format("relogio do foguete: %.4f s a cada 30 s aqui", 30 / gamma_foguete))
 local eps_real = energia_anel(solenoide) / (solenoide.massa * C^2)
-print(string.format("aneis do solenoide real pra chegar nisso: %.1e", aneis_para(b_video, eps_real)))
+print(string.format("aneis do solenoide real pra chegar nisso: %.1e", aneis_para(b_foguete, eps_real)))
 
 
 -- ===================================================================
@@ -243,15 +243,15 @@ print(string.format("aneis do solenoide real pra chegar nisso: %.1e", aneis_para
 -- relatividade aparecer de verdade (relogio andando a 60%).
 
 print("\n-- 5) aneis exagerados (5% de mc2 por anel) --")
-local eps_video = 0.05
+local eps_exagerado = 0.05
 for k = 1, 20 do
-  local x = k * eps_video
+  local x = k * eps_exagerado
   -- "relogio": quantos segundos passam pro foguete enquanto passam 30 s aqui
   print(string.format("anel %2d  gamma %.3f  beta %.4f  newton %.4f  relogio %.2f s/30s",
     k, 1 + x, beta(x), beta_newton(x), 30 / (1 + x)))
 end
 -- math.ceil arredonda pra cima (nao existe meio anel)
-print(string.format("beta 0.8 no anel %d", math.ceil(aneis_para(0.8, eps_video))))
+print(string.format("beta 0.8 no anel %d", math.ceil(aneis_para(0.8, eps_exagerado))))
 
 
 -- ===================================================================
@@ -270,15 +270,14 @@ print(string.format("aneis pra beta 0.8: %.2e", aneis_para(0.8, eps)))
 
 
 -- ===================================================================
--- 7) estilingue igual ao do video: U = 10000 m/s, vi = 150 m/s, theta = 45
+-- 7) estilingue com a formula pronta: U = 10000 m/s, vi = 150 m/s
 -- ===================================================================
 -- a nave chega quase parada e sai com quase o dobro da velocidade do planeta.
--- o video mostra vf = 20070 m/s, mas a propria formula com 45 graus da 20106.
--- 20070 sairia com theta perto de 62 graus (o video deve arredondar o angulo).
+-- quanto mais ela contorna o planeta (theta menor), mais velocidade ganha.
 
-print("\n-- 7) estilingue do video (U = 10000 m/s, vi = 150 m/s) --")
-for _, theta in ipairs({0, 45, 62, 90, 180}) do
-  print(string.format("theta %3d graus  vf = %.0f m/s", theta, estilingue_video(150, 10000, theta)))
+print("\n-- 7) estilingue (U = 10000 m/s, vi = 150 m/s) --")
+for _, theta in ipairs({0, 45, 90, 135, 180}) do
+  print(string.format("theta %3d graus  vf = %.0f m/s", theta, estilingue(150, 10000, theta)))
 end
 
 
