@@ -30,12 +30,20 @@ formulas:
 - energia por anel: eta * B^2 / (2 * mu0) * volume
 - fator de lorentz: gamma = 1 + k * E_anel / (m * c^2)
 - velocidade: beta = sqrt(1 - 1/gamma^2)
+- estilingue do video: vf = (vi + 2U) * sqrt(1 - 4 vi U (1 - cos theta) / (vi + 2U)^2)
+
+![estilingue gravitacional do video](imagens/estilingue.webp)
+
+*estilingue gravitacional: a nave chega quase parada (150 m/s) num planeta a
+10 km/s e sai com o dobro. imagem do [video](https://www.youtube.com/watch?v=ErMSHiQRnc8).*
 
 o que sai:
 - a 5% de mc^2 por anel, chega em beta 0.8 no anel 14. o relogio do foguete anda
   a 60% do nosso (passam 30 s aqui, 18 s la)
 - um solenoide de verdade (1,26 T, ~3 kJ por anel) precisaria de ~2 x 10^16 aneis pra isso
-- 20 sobrevoos em jupiter nao chegam nem perto
+- o estilingue do video (U = 10000 m/s, vi = 150 m/s, theta = 45) da 20106 m/s
+  pela formula. o video mostra 20070, que seria theta perto de 62 graus
+- 20 sobrevoos em jupiter de verdade nao chegam nem perto de 0.8
 
 ### doppler
 

@@ -125,6 +125,17 @@ local function sobrevoo(v, P, rp, theta)
   return melhor, d   -- o lua deixa devolver dois valores de uma vez
 end
 
+-- a formula do estilingue que aparece no video (imagens/estilingue.webp):
+--   vf = (vi + 2U) * raiz( 1 - 4*vi*U*(1 - cos(theta)) / (vi + 2U)^2 )
+--   vi    = velocidade da nave antes (m/s)
+--   U     = velocidade do planeta (m/s)
+--   theta = angulo em graus. com theta = 0 a nave da a volta completa e sai
+--           com vi + 2U, o maximo possivel
+local function estilingue_video(vi, U, theta)
+  local t = math.rad(theta)   -- o lua faz cos em radianos, entao converte
+  return (vi + 2 * U) * math.sqrt(1 - 4 * vi * U * (1 - math.cos(t)) / (vi + 2 * U)^2)
+end
+
 
 -- ===================================================================
 -- 1) modo video: cada anel da 5% de m*c^2 (exagerado de proposito)
@@ -160,10 +171,23 @@ print(string.format("aneis pra beta 0.8: %.2e", aneis_para(0.8, eps)))
 
 
 -- ===================================================================
--- 3) estilingue em jupiter, 20 sobrevoos seguidos de frente
+-- 3) estilingue igual ao do video: U = 10000 m/s, vi = 150 m/s, theta = 45
+-- ===================================================================
+-- a nave chega quase parada e sai com quase o dobro da velocidade do planeta.
+-- o video mostra vf = 20070 m/s, mas a propria formula com 45 graus da 20106.
+-- 20070 sairia com theta perto de 62 graus (o video deve arredondar o angulo).
+
+print("\n-- 3) estilingue do video (U = 10000 m/s, vi = 150 m/s) --")
+for _, theta in ipairs({0, 45, 62, 90, 180}) do
+  print(string.format("theta %3d graus  vf = %.0f m/s", theta, estilingue_video(150, 10000, theta)))
+end
+
+
+-- ===================================================================
+-- 4) estilingue em jupiter de verdade, 20 sobrevoos seguidos de frente
 -- ===================================================================
 
-print("\n-- 3) estilingue (jupiter) --")
+print("\n-- 4) estilingue (jupiter) --")
 local v = 10000   -- comeca a 10 km/s
 for k = 1, 20 do
   -- passa a 1.1 raio de jupiter do centro (10% acima da "superficie")
