@@ -1,13 +1,12 @@
 # lua-physics
 
-cada pasta tem um arquivo `.lua` com tudo comentado, feito pra dar pra entender
-mesmo sem saber programar.
+cada pasta tem um arquivo `.lua` que roda direto no terminal.
 
 ## como rodar
 
 1. instala o lua (https://www.lua.org/download.html, ou no windows `winget install DEVCOM.Lua`)
 2. abre o terminal na pasta `lua-physics`
-3. roda o projeto que quiser, ex: `lua doppler/doppler.lua`
+3. roda o projeto que quiser, ex: `lua 2fa/2fa.lua`
 
 ## projetos
 
@@ -28,6 +27,17 @@ corrente (lei de faraday): eh essa interacao que empurra o foguete.
 ```
 lua acelerador/acelerador.lua
 ```
+
+o estilingue tambem tem animacao numa janela (precisa do [LOVE](https://love2d.org),
+`winget install Love2d.Love2d`): a gravidade curva o caminho da nave em volta do
+planeta, calculada passo a passo, e o painel mostra vi, U e a velocidade final.
+
+```
+& "C:\Program Files\LOVE\love.exe" acelerador
+```
+
+na janela: cima/baixo passa mais perto ou mais longe do planeta, esquerda/direita
+muda vi, +/- muda o ritmo, espaco pausa, r reinicia.
 
 formulas:
 - barra magnetizada: B = 2 T * alinhamento dos dominios (media de cos do angulo)
@@ -67,30 +77,43 @@ o que sai:
    20106 m/s. o maximo, dando a volta completa, eh vi + 2U = 20150 m/s
 8. **jupiter de verdade**: 20 sobrevoos nao chegam nem perto de 0.8
 
-### doppler
+### 2fa
 
-a cor da luz muda quando voce anda muito rapido ou cai num buraco negro.
-a luz de partida eh a H-alfa (656 nm), a linha vermelha do hidrogenio.
+o codigo de 6 numeros do app autenticador (2FA) muda a cada 30 segundos, e
+o servidor so aceita se o relogio do seu celular bater com o dele. pela
+relatividade, o relogio de quem viaja perto da velocidade da luz anda mais
+devagar: a 0.8c, enquanto passam 30 s na terra, passam so 18 s pro viajante.
+o codigo dele vai ficando pra tras ate o servidor recusar.
 
 ```
-lua doppler/doppler.lua
+lua 2fa/2fa.lua
 ```
 
-formulas (beta > 0 = indo na direcao da luz, beta < 0 = fugindo dela):
-- doppler relativistico: lambda_visto = lambda * sqrt((1 - beta) / (1 + beta))
-- redshift gravitacional: lambda_longe = lambda / sqrt(1 - rs/r)
+tem tambem uma animacao numa janela, feita com [LOVE](https://love2d.org)
+(`winget install Love2d.Love2d`): o foguete indo embora, os dois relogios, os
+codigos do servidor e do celular e o login ficando verde, amarelo e vermelho.
+
+```
+& "C:\Program Files\LOVE\love.exe" 2fa
+```
+
+na janela: cima/baixo muda a velocidade, esquerda/direita acelera o tempo,
+espaco pausa, r reinicia.
+
+formulas:
+- fator de lorentz: gamma = 1 / sqrt(1 - beta^2)
+- relogio do viajante: t_viajante = t_terra / gamma
+- janela do codigo: floor(t / 30)
+- relogio do GPS: -beta^2 / 2 (velocidade) + GM/c^2 * (1/R_terra - 1/r_satelite) (gravidade)
+
+o codigo de 6 numeros eh gerado de verdade (TOTP com HMAC-SHA1), e confere com
+o exemplo oficial da RFC 6238.
 
 o que sai:
-1. **nave e luz vermelha**: indo na direcao dela a beta 0.3 o vermelho vira azul
-   (482 nm). fugindo, vira infravermelho. a 0.8 de frente ja eh ultravioleta
-2. **caindo no buraco negro, olhando pra tras**: a gravidade deixa a luz das
-   estrelas mais azul, mas voce ta fugindo dela e o doppler ganha. a conta vira
-   lambda * (1 + beta). perto do horizonte a luz chega com o dobro do comprimento
-3. **disco de acrecao** (gas a 3 raios do buraco girando a c/2): o lado que vem
-   pra ca chega azul (464 nm), o que vai embora chega infravermelho (1392 nm)
-4. **jato relativistico**: a 0.99c o jato que vem pra ca vira ultravioleta e o
-   contra-jato vai pra quase 10 mil nm
-
-obs: quem muda a cor eh o doppler + a dilatacao do tempo, nao a contracao do
-espaco. e perto do buraco negro entra um segundo efeito separado, o redshift
-gravitacional (a luz perde energia pra "subir" da gravidade).
+1. **viajante a 0.8c**: o servidor aceita o codigo dele com 1 janela de folga,
+   mas aos 90 s na terra (54 s pra ele) ja recusa
+2. **tempo ate trancar**: a 0.01c leva 6.9 dias, a 0.1c 100 min, a 0.99c 60 s.
+   o kerberos (login de rede, que aceita 5 min de diferenca) aguenta de 6 a 10 vezes mais
+3. **GPS de verdade**: a velocidade atrasa o relogio do satelite 7.2 microssegundos por dia,
+   a gravidade mais fraca adianta 45.7. sobra +38.5 microssegundos por dia, que sem
+   correcao viraria 11.5 km de erro por dia
