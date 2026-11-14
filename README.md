@@ -117,3 +117,70 @@ o que sai:
 3. **GPS de verdade**: a velocidade atrasa o relogio do satelite 7.2 microssegundos por dia,
    a gravidade mais fraca adianta 45.7. sobra +38.5 microssegundos por dia, que sem
    correcao viraria 11.5 km de erro por dia
+
+### tipler
+
+o cilindro de tipler eh um cilindro infinito, muito denso, girando muito
+rapido. a ideia eh que a rotacao arrasta o espaco-tempo junto (arrasto de
+referencial, o mesmo efeito que a sonda gravity probe B mediu em volta da
+terra, so que absurdamente mais forte). o codigo usa a solucao exata de
+van stockum (1937): poeira girando, preenchendo tudo em volta de um eixo.
+tipler (1974) mostrou que um cilindro assim pode virar maquina do tempo.
+
+```
+lua tipler/tipler.lua
+```
+
+o cone de luz eh o conjunto de caminhos que da pra seguir sem passar da luz:
+pra cima eh o futuro. perto do eixo ele eh normal (45 graus pra cada lado).
+quanto mais longe do eixo, mais a rotacao tomba o cone no sentido do giro. em
+r = 1/a a borda da frente fica deitada, e depois disso ela aponta pra baixo:
+andar no sentido do giro, mesmo devagar, pode levar pra um t menor. dando a
+volta, a nave chega antes de sair.
+
+e de dentro da nave? nada de estranho. o relogio da nave (tau) sempre anda pra
+frente, ninguem fica mais novo, tudo dentro envelhece normal. o que vai pra
+tras eh o t, o relogio da poeira parada em cada lugar (o "de fora"). quando a
+nave volta pro eixo, o relogio de la marca uma hora antes da partida.
+
+tem animacao numa janela ([LOVE](https://love2d.org)): a nave dando voltas, os
+dois relogios, o grafico de t contra tau e os cones de luz tombando.
+
+```
+& "C:\Program Files\LOVE\love.exe" tipler
+```
+
+na janela: cima/baixo muda o raio da volta, esquerda/direita muda v, +/- muda o
+ritmo, espaco pausa, r reinicia.
+
+![cilindro de tipler](imagens/tipler.png)
+
+*a nave a 0.8c em r = 1.5 L, por fora do circulo azul (r = 1/(a v)): a cada
+volta ela envelhece 7.07 h e chega 2.36 h antes. no grafico o relogio dela so
+sobe, o de fora so desce. embaixo, o cone de luz tomba conforme r cresce; no da
+nave, o caminho laranja aponta pra baixo da linha de t parado.*
+
+formulas (c = G = 1, comprimento em L = 1/a):
+- metrica: ds^2 = -(dt + a r^2 dphi)^2 + r^2 dphi^2 + exp(-a^2 r^2) (dr^2 + dz^2)
+- g_phiphi = r^2 (1 - a^2 r^2): negativo depois de r = 1/a, ai um circulo com t
+  parado eh tipo tempo (curva fechada do tipo tempo, CTC)
+- arrasto: omega = a / (1 - a^2 r^2)
+- borda da frente do cone: dt/dx = 1 - a r (x = r phi)
+- volta a velocidade v (medida pela poeira): dt/dtau = gamma (1 - a r v).
+  volta no tempo quando a r v > 1
+
+o que sai:
+1. **cone de luz**: borda da frente a 45 graus no eixo, 26.6 em r = 0.5 L,
+   0 em r = 1 L e -45 em r = 2 L. a luz que da a volta em r = 2 L chega
+   12.6 h antes
+2. **CTC** em r = 2 L: o circulo com t parado eh tipo tempo. uma volta leva 0 h
+   de fora e 21.77 h pra quem esta dentro
+3. **velocidade minima**: a 0.5c precisa de r > 2 L, a 0.99c de r > 1.01 L
+4. **maquina do tempo** (L = 1 hora-luz): sai do eixo a 0.5c ate r = 2 L
+   (2.39 h), da 4 voltas a 0.8c (cada uma -9.42 h de fora e +9.42 h na nave) e
+   volta. chega 32.91 h antes de sair, tendo envelhecido 41.84 h
+
+na pratica: a poeira de van stockum enche o universo inteiro (a densidade cresce
+com exp(a^2 r^2) indo pra fora) e um cilindro de verdade precisaria ser infinito.
+hawking (1992) mostrou que, com tamanho finito, so daria pra criar uma CTC
+usando energia negativa, que ninguem sabe se existe nessa quantidade.
