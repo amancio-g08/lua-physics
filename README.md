@@ -59,23 +59,20 @@ formulas:
 planeta ta andando, visto de fora isso vira ganho de velocidade: ela chega quase
 parada (150 m/s) num planeta a 10 km/s e sai com o dobro.*
 
-o que sai:
-1. **barra**: com 1000 dominios sorteados, cada passada de um ima alinha mais.
-   o alinhamento vai de ~0 pra 0.63, 0.90, 0.97... e a barra chega perto de 2 T
-2. **solenoide com 2 espiras**: so no ar da 0.0025 T. com a barra de ferro
-   dentro passaria de 2.5 T, mas o ferro satura em 2 T
-3. **fluxo no anel** (raio 0.1 m, 1.26 T): 0.0395 Wb de frente, cai com cos
-   theta e vira zero com o anel de lado
-4. **foguete a 4197261 m/s**: parece muito, mas eh beta 1.4%. o relogio do
-   foguete quase nao atrasa (29.997 s a cada 30 s). com um solenoide real
-   seriam ~3 x 10^12 aneis
-5. **aneis exagerados** (5% de mc^2 por anel): chega em beta 0.8 no anel 14.
-   o relogio do foguete anda a 60% do nosso (passam 30 s aqui, 18 s la)
-6. **solenoide real** (1.26 T, ~3 kJ por anel): precisaria de ~2 x 10^16 aneis
-   pra beta 0.8
-7. **estilingue** (U = 10000 m/s, vi = 150 m/s): com theta = 45 graus sai a
-   20106 m/s. o maximo, dando a volta completa, eh vi + 2U = 20150 m/s
-8. **jupiter de verdade**: 20 sobrevoos nao chegam nem perto de 0.8
+com 1000 dominios sorteados, cada passada de um ima alinha mais a barra: o
+alinhamento vai de ~0 pra 0.63, 0.90, 0.97 e ela chega perto de 2 T. o
+solenoide com 2 espiras so no ar da 0.0025 T, com o ferro dentro passaria de
+2.5 T mas o ferro satura em 2 T. no anel (raio 0.1 m, 1.26 T) o fluxo eh
+0.0395 Wb de frente e zero de lado.
+
+o foguete chega a 4197261 m/s, que parece muito mas eh so beta 1.4%, o relogio
+dele quase nao atrasa (29.997 s a cada 30 s). com aneis exagerados (5% de mc^2
+por anel) chega em beta 0.8 no anel 14, e ai o relogio do foguete anda a 60% do
+nosso. com um solenoide real (~3 kJ por anel) seriam ~2 x 10^16 aneis pra isso.
+
+no estilingue (U = 10000 m/s, vi = 150 m/s) a nave sai a 20106 m/s com theta =
+45 graus, e no maximo vi + 2U = 20150 m/s. com jupiter de verdade, 20
+sobrevoos nao chegam nem perto de 0.8.
 
 ### 2fa
 
@@ -109,21 +106,21 @@ formulas:
 o codigo de 6 numeros eh gerado de verdade (TOTP com HMAC-SHA1), e confere com
 o exemplo oficial da RFC 6238.
 
-o que sai:
-1. **viajante a 0.8c**: o servidor aceita o codigo dele com 1 janela de folga,
-   mas aos 90 s na terra (54 s pra ele) ja recusa
-2. **tempo ate trancar**: a 0.01c leva 6.9 dias, a 0.1c 100 min, a 0.99c 60 s.
-   o kerberos (login de rede, que aceita 5 min de diferenca) aguenta de 6 a 10 vezes mais
-3. **GPS de verdade**: a velocidade atrasa o relogio do satelite 7.2 microssegundos por dia,
-   a gravidade mais fraca adianta 45.7. sobra +38.5 microssegundos por dia, que sem
-   correcao viraria 11.5 km de erro por dia
+a 0.8c o servidor ainda aceita o codigo com 1 janela de folga, mas aos 90 s na
+terra (54 s pro viajante) ja recusa. a 0.01c leva 6.9 dias pra trancar, a 0.1c
+100 min e a 0.99c 60 s. o kerberos (login de rede, que aceita 5 min de
+diferenca) aguenta de 6 a 10 vezes mais.
+
+no GPS de verdade a velocidade atrasa o relogio do satelite 7.2 microssegundos
+por dia e a gravidade mais fraca adianta 45.7, sobrando +38.5 por dia. sem
+correcao isso daria 11.5 km de erro por dia.
 
 ### tipler
 
 o cilindro de tipler eh um cilindro infinito, muito denso, girando muito
 rapido. a ideia eh que a rotacao arrasta o espaco-tempo junto (arrasto de
-referencial, o mesmo efeito que a sonda gravity probe B mediu em volta da
-terra, so que absurdamente mais forte). o codigo usa a solucao exata de
+referencial, o mesmo efeito que a gravity probe B mediu em volta da terra, so
+que muito mais forte). o codigo usa a solucao exata de
 van stockum (1937): poeira girando, preenchendo tudo em volta de um eixo.
 tipler (1974) mostrou que um cilindro assim pode virar maquina do tempo.
 
@@ -138,8 +135,8 @@ r = 1/a a borda da frente fica deitada, e depois disso ela aponta pra baixo:
 andar no sentido do giro, mesmo devagar, pode levar pra um t menor. dando a
 volta, a nave chega antes de sair.
 
-e de dentro da nave? nada de estranho. o relogio da nave (tau) sempre anda pra
-frente, ninguem fica mais novo, tudo dentro envelhece normal. o que vai pra
+dentro da nave nao acontece nada de diferente: o relogio da nave (tau) sempre
+anda pra frente e ninguem fica mais novo. o que vai pra
 tras eh o t, o relogio da poeira parada em cada lugar (o "de fora"). quando a
 nave volta pro eixo, o relogio de la marca uma hora antes da partida.
 
@@ -169,16 +166,14 @@ formulas (c = G = 1, comprimento em L = 1/a):
 - volta a velocidade v (medida pela poeira): dt/dtau = gamma (1 - a r v).
   volta no tempo quando a r v > 1
 
-o que sai:
-1. **cone de luz**: borda da frente a 45 graus no eixo, 26.6 em r = 0.5 L,
-   0 em r = 1 L e -45 em r = 2 L. a luz que da a volta em r = 2 L chega
-   12.6 h antes
-2. **CTC** em r = 2 L: o circulo com t parado eh tipo tempo. uma volta leva 0 h
-   de fora e 21.77 h pra quem esta dentro
-3. **velocidade minima**: a 0.5c precisa de r > 2 L, a 0.99c de r > 1.01 L
-4. **maquina do tempo** (L = 1 hora-luz): sai do eixo a 0.5c ate r = 2 L
-   (2.39 h), da 4 voltas a 0.8c (cada uma -9.42 h de fora e +9.42 h na nave) e
-   volta. chega 32.91 h antes de sair, tendo envelhecido 41.84 h
+a borda da frente do cone fica a 45 graus no eixo, 26.6 em r = 0.5 L, 0 em
+r = 1 L e -45 em r = 2 L. em r = 2 L o circulo com t parado ja eh tipo tempo:
+uma volta leva 0 h de fora e 21.77 h pra quem ta dentro. a 0.5c precisa de
+r > 2 L pra voltar no tempo, a 0.99c basta r > 1.01 L.
+
+tomando L = 1 hora-luz: a nave sai do eixo a 0.5c ate r = 2 L (2.39 h), da 4
+voltas a 0.8c (cada uma -9.42 h de fora e +9.42 h na nave) e volta pro eixo.
+chega 32.91 h antes de sair, tendo envelhecido 41.84 h.
 
 na pratica: a poeira de van stockum enche o universo inteiro (a densidade cresce
 com exp(a^2 r^2) indo pra fora) e um cilindro de verdade precisaria ser infinito.
