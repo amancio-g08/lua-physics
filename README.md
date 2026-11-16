@@ -179,3 +179,53 @@ na pratica: a poeira de van stockum enche o universo inteiro (a densidade cresce
 com exp(a^2 r^2) indo pra fora) e um cilindro de verdade precisaria ser infinito.
 hawking (1992) mostrou que, com tamanho finito, so daria pra criar uma CTC
 usando energia negativa, que ninguem sabe se existe nessa quantidade.
+
+### ceu
+
+como o ceu parece de dentro de uma nave quase na velocidade da luz. acontecem
+tres coisas juntas. a aberracao da luz junta as estrelas na frente (eh o mesmo
+motivo da chuva parecer vir de frente quando voce corre). o doppler
+relativistico deixa a luz da frente mais azul e a de tras mais vermelha. e as
+da frente ficam muito mais brilhantes, as de tras quase somem.
+
+```
+lua ceu/ceu.lua
+```
+
+a animacao mostra a vista da cabine em olho de peixe: o centro eh a frente, a
+borda eh a traseira, e a distancia do centro eh o angulo. os circulos azuis
+marcam onde ficavam 30, 60, 90... graus com a nave parada, e da pra ver eles
+encolhendo pro centro.
+
+```
+& "C:\Program Files\LOVE\love.exe" ceu
+```
+
+na janela: cima/baixo acelera e freia, 1 2 3 ligam e desligam aberracao, cor e
+brilho (da pra ver o que cada efeito faz sozinho), r para a nave. tambem da
+pra abrir ja numa velocidade, ex: `love.exe ceu 0.9`.
+
+![ceu a 0.9c](imagens/ceu.png)
+
+*a 0.9c: quase tudo se juntou num cone na frente, azulado e forte. o circulo
+tracejado eh o lado da nave, e quase nao sobra estrela fora dele.*
+
+formulas (theta = angulo com a direcao do movimento):
+- aberracao: cos theta = (cos theta0 + v) / (1 + v cos theta0)
+- doppler: D = 1 / (gamma (1 - v cos theta)), na frente D = sqrt((1 + v) / (1 - v))
+- temperatura vista: T = D T0 (corpo negro continua corpo negro)
+- brilho: D^4
+- pico da luz (wien): lambda = 2.898e-3 / T
+
+uma estrela que estava de lado (90 graus) aparece a 60 graus com a nave a 0.5c,
+a 25.8 a 0.9c e a 8.1 a 0.99c. a metade da frente fica com (1 + v) / 2 das
+estrelas: 95% a 0.9c. sorteando 100000 estrelas, o cone de 30 graus da frente
+vai de 6.7% delas parado pra 58% a 0.9c e 93% a 0.99c, batendo com a conta.
+
+um sol (5800 K) bem na frente a 0.9c fica com 25282 K, pico em 115 nm
+(ultravioleta) e 361 vezes mais brilhante. atras fica com 1331 K, pico no
+infravermelho e 361 vezes mais fraco. a 90 graus da nave ele ja aparece
+avermelhado (D = 0.44), porque o relogio da nave atrasa (doppler transversal).
+
+ate o fundo de micro-ondas (2.725 K) acenderia na frente: pra chegar a 1000 K,
+que eh brilho de brasa, precisa de D = 367, ou seja gamma = 183.
