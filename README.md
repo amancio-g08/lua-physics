@@ -229,3 +229,64 @@ avermelhado (D = 0.44), porque o relogio da nave atrasa (doppler transversal).
 
 ate o fundo de micro-ondas (2.725 K) acenderia na frente: pra chegar a 1000 K,
 que eh brilho de brasa, precisa de D = 367, ou seja gamma = 183.
+
+### penrose
+
+um buraco negro girando (de kerr) tem em volta do horizonte uma regiao chamada
+ergosfera, onde o arrasto de referencial eh tao forte que nada consegue ficar
+parado, tudo eh obrigado a girar junto. penrose (1969) percebeu que la dentro
+um objeto pode ter energia negativa vista de longe. entao a nave entra, se
+parte em duas, joga uma metade pra tras de um jeito que ela fique com energia
+negativa, e essa metade cai no buraco. a outra metade sai com mais energia do
+que a nave inteira tinha, e quem paga eh a rotacao do buraco. eh parecido com
+o estilingue do acelerador, so que roubando energia de um buraco negro em vez
+de um planeta.
+
+```
+lua penrose/penrose.lua
+```
+
+na animacao a nave cai do infinito, da umas voltas arrastada pela rotacao, se
+parte no ponto de retorno e da pra ver a metade vermelha (energia negativa)
+caindo girando junto com o buraco e a verde indo embora. a orbita eh calculada
+passo a passo (RK4) com a metrica de kerr.
+
+```
+& "C:\Program Files\LOVE\love.exe" penrose
+```
+
+na janela: cima/baixo muda o raio onde a nave se parte, esquerda/direita a
+velocidade das metades, 1/2 a rotacao do buraco, +/- o ritmo, espaco pausa, r
+reinicia.
+
+![processo de penrose](imagens/penrose.png)
+
+*a = 0.99, quebra em r = 1.4 com as metades a 0.9c: a vermelha cai com
+E = -0.038 e a verde sai com 3.79% a mais de energia.*
+
+formulas (G = c = M = 1, no plano do equador, a = rotacao de 0 a 1):
+- metrica de kerr: g_tt = -(1 - 2/r), g_tphi = -2a/r, g_phiphi = r^2 + a^2 + 2a^2/r,
+  delta = r^2 - 2r + a^2
+- horizonte: r+ = 1 + sqrt(1 - a^2), ergosfera ate r = 2 (onde g_tt = 0)
+- energia e momento angular (conservados): E = -u_t, L = u_phi
+- radial: (dr/dtau)^2 = (g_phiphi E^2 + 2 g_tphi E L + g_tt L^2 - delta) / r^2
+- area do horizonte nao diminui: dM - OmegaH dJ >= 0, OmegaH = a / (r+^2 + a^2)
+- massa irredutivel: M_irr = sqrt(r+^2 + a^2) / 2
+
+com a = 0.99, a nave caindo do infinito (E = 1) e se partindo em r = 1.5 com as
+metades a 0.9c: a de tras fica com E = -0.0196 e a da frente com 1.0196, ou
+seja 2% a mais. a soma da 1 certinho. o buraco perde 0.0196 de massa e 0.26 de
+momento angular, e a area do horizonte ainda cresce (dM - OmegaH dJ = 0.094),
+como tem que ser.
+
+quanto mais perto do horizonte, mais ganha: 3.8% em r = 1.4 e 6.9% em r = 1.25.
+perto da borda da ergosfera (r = 1.8) a 0.9c a metade de tras ainda fica com
+energia positiva e perde. abaixo de r = 1.21 uma nave que cai parada do
+infinito ja nao consegue parar ali (ou bate na barreira antes, ou passa direto
+e cai no buraco).
+
+o maximo eh com o buraco girando no limite (a = 1), quebrando no horizonte e
+jogando as metades na velocidade da luz: o codigo da 20.68% em r = 1.001, e a
+conta do penrose da (sqrt(2) - 1) / 2 = 20.71%. no total da pra tirar a parte
+da massa que eh rotacao: 24.5% com a = 0.99 e 29.3% com a = 1. com a = 0 nao
+tem ergosfera e nao sai nada.
