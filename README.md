@@ -345,3 +345,61 @@ esse exagero o termo da relatividade nao eh mais pequeno. sem aproximar a conta
 da 2 pi (1/sqrt(1 - 2 lam) - 1) = 32.73 graus, com lam = 3 GM / (c^2 a (1 - e^2))
 ja exagerado. com exagero de 10^4 as tres
 dao 0.29.
+
+### minhoca
+
+um buraco de minhoca eh um tunel no espaco ligando dois lugares. o de
+schwarzschild (a "ponte de einstein-rosen") fecha antes de qualquer coisa
+passar, entao o codigo usa o modelo atravessavel mais simples, o de ellis
+(1973), que morris e thorne (1988) usaram pra estudar se alguem conseguiria
+passar. a garganta tem raio b0 e nunca fecha. o problema eh que, pelas
+equacoes de einstein, pra manter ela aberta a densidade de energia precisa ser
+negativa em todo lugar. eh a mesma energia negativa que o tipler precisaria.
+
+```
+lua minhoca/minhoca.lua
+```
+
+a animacao mostra o diagrama de imersao (a superficie em forma de ampulheta eh
+um jeito de desenhar a curvatura, a altura nao eh uma direcao de verdade) com
+uma pessoa atravessando. os aneis ficam mais vermelhos onde a energia negativa
+eh maior, na garganta. o formato eh igual pra qualquer tamanho de garganta, so
+os numeros mudam.
+
+```
+& "C:\Program Files\LOVE\love.exe" minhoca
+```
+
+na janela: cima/baixo muda o tamanho da garganta (de 1 m a 10^8 m),
+esquerda/direita a velocidade (em fracao da maxima que a pessoa aguenta),
+espaco pausa, r reinicia.
+
+![buraco de minhoca](imagens/minhoca.png)
+
+*garganta de 1 km: precisa de um sol de energia negativa, e passando na
+velocidade maxima (2.2 km/s) a mare nunca passa de 1 g.*
+
+formulas (l = distancia andando pelo tunel, negativo de um lado e positivo do
+outro):
+- metrica: ds^2 = -c^2 dt^2 + dl^2 + (l^2 + b0^2) dOmega^2
+- raio: r = sqrt(l^2 + b0^2), formato no desenho: z = b0 asinh(l / b0)
+- densidade de energia: rho c^2 = -c^4 b0^2 / (8 pi G r^4)
+- energia negativa somada pelo tunel todo: -(pi / 2) b0 c^2 / G (em kg)
+- mare lateral em quem passa: gamma^2 v^2 xi b0^2 / r^4 (xi = tamanho da pessoa)
+- efeito casimir (entre placas a uma distancia d): -pi^2 hbar c / (720 d^4)
+
+com b0 = 1 m, a densidade na garganta eh -4.8 x 10^42 J/m^3, umas 5 x 10^22 vezes a
+energia de repouso (mc^2) da agua. somando pelo tunel todo da -2.1 x 10^27 kg
+(a soma numerica bate com a conta), ou seja uma jupiter de massa negativa pra
+um tunel de 1 metro. com 1 km eh um sol inteiro.
+
+pra pessoa (2 m) nao ser esticada com mais de 1 g, a velocidade maxima eh 2.2
+m/s numa garganta de 1 m, 2.2 km/s numa de 1 km e 0.59c numa de 10^8 m. como
+a velocidade maxima cresce junto com o tamanho, atravessar de l = -10 b0 ate
+10 b0 leva sempre 9 s no relogio da pessoa.
+
+a unica energia negativa medida de verdade eh a do efeito casimir, entre duas
+placas de metal muito proximas. pra chegar na densidade da garganta de 1 m, as
+placas teriam que estar a 3 x 10^-18 m, centenas de vezes menos que o tamanho
+de um proton. por isso
+ninguem acha que da pra construir um.
