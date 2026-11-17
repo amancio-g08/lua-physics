@@ -290,3 +290,58 @@ jogando as metades na velocidade da luz: o codigo da 20.68% em r = 1.001, e a
 conta do penrose da (sqrt(2) - 1) / 2 = 20.71%. no total da pra tirar a parte
 da massa que eh rotacao: 24.5% com a = 0.99 e 29.3% com a = 1. com a = 0 nao
 tem ergosfera e nao sai nada.
+
+### mercurio
+
+pela gravitacao de newton, um planeta sozinho em volta do sol faz uma elipse
+que fecha sempre no mesmo lugar. a de mercurio nao fecha: o perielio (ponto
+mais perto do sol) anda ~575 segundos de arco por seculo. o puxao dos outros
+planetas explica ~532, e os ~43 que sobravam ficaram sem explicacao de 1859 ate
+1915, quando a relatividade geral deu exatamente esse numero. foi o primeiro
+teste que ela passou.
+
+o codigo integra a equacao da orbita (equacao de binet, com u = 1/r em funcao
+do angulo) com e sem o termo da relatividade e mede quanto o perielio andou
+depois de uma volta.
+
+```
+lua mercurio/mercurio.lua
+```
+
+na animacao o efeito eh exagerado (de verdade sao 0.1 segundo de arco por volta,
+nao da pra ver). a bolinha branca so tem newton e fica na mesma elipse; a
+laranja tem a correcao e vai fazendo uma roseta. as duas comecam com o mesmo
+perielio e o mesmo afelio.
+
+```
+& "C:\Program Files\LOVE\love.exe" mercurio
+```
+
+na janela: cima/baixo muda o exagero (de 10^4 a 2 x 10^6 vezes), +/- o ritmo,
+espaco pausa, r reinicia.
+
+![precessao de mercurio](imagens/mercurio.png)
+
+*exagerando 10^6 vezes: o perielio anda 32.7 graus por volta (linhas azuis).
+a elipse cinza eh a de newton.*
+
+formulas:
+- newton: u'' + u = GM / h^2 (u = 1/r, derivada no angulo, h = momento angular por massa)
+- relatividade geral: u'' + u = GM / h^2 + 3 GM u^2 / c^2
+- na animacao, a mesma coisa como forca: a = -(GM / r^2) (1 + 3 h^2 / (c^2 r^2))
+- precessao por volta: 6 pi GM / (c^2 a (1 - e^2))
+
+com 100000 passos por volta, so newton o perielio anda 4 x 10^-12 rad (eh erro
+numerico, a elipse fecha). com a relatividade anda 5.0186 x 10^-7 rad, 0.1035
+segundo de arco, e a formula da 5.0187 x 10^-7. em 100 anos mercurio da 415
+voltas, o que da 42.98 segundos de arco por seculo. pros outros planetas o
+codigo da 8.62 pra venus, 3.84 pra terra e 1.35 pra marte, igual a formula. no
+ritmo de mercurio, o perielio levaria 3 milhoes de anos pra dar uma volta
+inteira so pela relatividade.
+
+na animacao, com exagero de 10^6 a formula da 28.75 graus por volta mas o
+codigo mede 32.74. nao eh erro: a formula eh so a primeira aproximacao, e com
+esse exagero o termo da relatividade nao eh mais pequeno. sem aproximar a conta
+da 2 pi (1/sqrt(1 - 2 lam) - 1) = 32.73 graus, com lam = 3 GM / (c^2 a (1 - e^2))
+ja exagerado. com exagero de 10^4 as tres
+dao 0.29.
